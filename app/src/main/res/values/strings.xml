@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Sharp Productivity Timer</string>
+    <string-array name="pomodoro_time">
+        <item>%1$d:00</item>
+        <item>0%1$d:00</item>
+        <item>%1$d:%2$d</item>
+        <item>0%1$d:%2$d</item>
+        <item>%1$d:0%2$d</item>
+        <item>0%1$d:0%2$d</item>
+    </string-array>
+    <string name="timer_button_start">Start Timer</string>
+    <string name="timer_button_stop">Stop Timer</string>
+    <string name="dialog_button_start">Start Break</string>
+    <string name="dialog_button_close">Close</string>
+    <string name="dialog_button_skip">Skip Break</string>
+    <string name="dialog_session_complete">Session Complete</string>
+    <string-array name="dialog_session">
+        <item>Session Complete</item>
+        <item>Break Complete</item>
+    </string-array>
+</resources>
