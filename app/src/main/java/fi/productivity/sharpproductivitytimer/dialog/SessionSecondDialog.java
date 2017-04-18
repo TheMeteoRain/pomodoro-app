@@ -24,6 +24,7 @@ public class SessionSecondDialog extends DialogFragment implements SessionDialog
 
         try {
             // Instantiate the NoticeDialogListener so we can send events to the host
+            if (activity instanceof SessionDialogListener)
             mListener = (SessionDialogListener) activity;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
@@ -31,7 +32,7 @@ public class SessionSecondDialog extends DialogFragment implements SessionDialog
                     + " must implement NoticeDialogListener");
         }
     }
-
+//asd
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -42,26 +43,28 @@ public class SessionSecondDialog extends DialogFragment implements SessionDialog
         // Pass null as the parent view because its going in the dialog layout
         builder.setView(inflater.inflate(R.layout.dialog_session, null))
                 .setNeutralButton(R.string.dialog_button_close, (dialog, id) -> {
-                    mListener.onDialogNeutralClick(SessionSecondDialog.this);
+                    System.out.println("CLOSE " + id);
+                    mListener.onDialogClose();
                 })
-                .setPositiveButton(R.string.dialog_button_start, (dialog, id) -> {
-                    mListener.onDialogPositiveClick(SessionSecondDialog.this);
+                .setPositiveButton(R.string.dialog_button_session, (dialog, id) -> {
+                    System.out.println("BEGIN " + id);
+                    mListener.onDialogSkipBreak();
                 });
         return builder.create();
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
+    public void onDialogStartBreak() {
 
     }
 
     @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
+    public void onDialogSkipBreak() {
 
     }
 
     @Override
-    public void onDialogNeutralClick(DialogFragment dialog) {
+    public void onDialogClose() {
 
     }
 }

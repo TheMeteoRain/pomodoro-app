@@ -8,5 +8,5 @@
         android:layout_height="64dp"
         android:scaleType="center"
         android:background="#FFFFBB33"
-        android:contentDescription="@string/app_name" />
+        android:contentDescription="@string/dialog_session_complete" />
 </LinearLayout>

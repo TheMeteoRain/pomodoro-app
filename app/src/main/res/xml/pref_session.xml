@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <EditTextPreference
+        android:defaultValue="@string/pref_default_pomodoro_time"
+        android:inputType="number"
+        android:numeric="integer"
+        android:key="pomodoro_time"
+        android:maxLines="1"
+        android:maxLength="2"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_pomodoro_time" />
+
+    <EditTextPreference
+        android:defaultValue="@string/pref_default_break_time"
+        android:inputType="number"
+        android:numeric="integer"
+        android:key="break_time"
+        android:maxLines="1"
+        android:maxLength="2"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_break_time" />
+
+    <EditTextPreference
+        android:defaultValue="@string/pref_default_long_break_time"
+        android:inputType="number"
+        android:numeric="integer"
+        android:key="long_break_time"
+        android:maxLines="1"
+        android:maxLength="2"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_long_break_time" />
+
+    <EditTextPreference
+        android:defaultValue="@string/pref_default_sessions"
+        android:inputType="number"
+        android:numeric="integer"
+        android:key="sessions"
+        android:maxLines="1"
+        android:maxLength="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_sessions" />
+
+</PreferenceScreen>

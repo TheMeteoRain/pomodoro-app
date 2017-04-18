@@ -11,7 +11,7 @@
         android:id="@+id/timerText"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="00:00"
+        android:text="99:99"
         android:textSize="100sp"
         android:textAlignment="center"
         android:layout_gravity="center"
@@ -19,9 +19,15 @@
         android:layout_weight="1" />
 
     <Button
-        android:id="@+id/timerButton"
+        android:id="@+id/timerButtonPlay"
         android:text="@string/timer_button_start"
-        android:onClick="startTimer"
+        android:onClick="timerButtonPlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/timerButtonPause"
+        android:text="@string/timer_button_pause"
+        android:onClick="timerButtonPause"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

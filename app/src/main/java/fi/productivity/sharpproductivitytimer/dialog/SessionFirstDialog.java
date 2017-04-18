@@ -24,7 +24,8 @@ public class SessionFirstDialog extends DialogFragment implements SessionDialogL
 
         try {
             // Instantiate the NoticeDialogListener so we can send events to the host
-            mListener = (SessionDialogListener) activity;
+            if (activity instanceof SessionDialogListener)
+                mListener = (SessionDialogListener) activity;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(activity.toString()
@@ -42,29 +43,29 @@ public class SessionFirstDialog extends DialogFragment implements SessionDialogL
         // Pass null as the parent view because its going in the dialog layout
         builder.setView(inflater.inflate(R.layout.dialog_session, null))
                 .setNeutralButton(R.string.dialog_button_close, (dialog, id) -> {
-                    mListener.onDialogNeutralClick(SessionFirstDialog.this);
+                    mListener.onDialogClose();
                 })
                 .setPositiveButton(R.string.dialog_button_start, (dialog, id) -> {
-                    mListener.onDialogPositiveClick(SessionFirstDialog.this);
+                    mListener.onDialogStartBreak();
                 })
                 .setNegativeButton(R.string.dialog_button_skip, (dialog, id) -> {
-                    mListener.onDialogNegativeClick(SessionFirstDialog.this);
+                    mListener.onDialogSkipBreak();
                 });
         return builder.create();
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
+    public void onDialogStartBreak() {
 
     }
 
     @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
+    public void onDialogSkipBreak() {
 
     }
 
     @Override
-    public void onDialogNeutralClick(DialogFragment dialog) {
+    public void onDialogClose() {
 
     }
 }
