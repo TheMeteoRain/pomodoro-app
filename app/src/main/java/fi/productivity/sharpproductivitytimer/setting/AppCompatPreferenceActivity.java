@@ -1,4 +1,4 @@
-package fi.productivity.sharpproductivitytimer;
+package fi.productivity.sharpproductivitytimer.setting;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

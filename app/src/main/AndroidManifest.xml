@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fi.productivity.sharpproductivitytimer">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,7 +13,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,14 +23,25 @@
         </activity>
 
         <service
-            android:name=".TimerService"
+            android:name=".service.TimerService"
             android:enabled="true"
             android:exported="true" />
 
         <activity
-            android:name=".SettingsActivity"
+            android:name=".setting.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fi.productivity.sharpproductivitytimer.MainActivity" />
+        </activity>
+        <activity
+            android:name=".StatActivity"
+            android:label="@string/title_activity_stat"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fi.productivity.sharpproductivitytimer.MainActivity" />

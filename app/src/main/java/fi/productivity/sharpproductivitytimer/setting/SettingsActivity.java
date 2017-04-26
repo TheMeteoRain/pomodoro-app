@@ -1,4 +1,4 @@
-package fi.productivity.sharpproductivitytimer;
+package fi.productivity.sharpproductivitytimer.setting;
 
 
 import android.annotation.TargetApi;
@@ -22,6 +22,8 @@ import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
 import java.util.List;
+
+import fi.productivity.sharpproductivitytimer.R;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -191,7 +193,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             bindPreferenceSummaryToValue(findPreference("pomodoro_time"));
             bindPreferenceSummaryToValue(findPreference("break_time"));
             bindPreferenceSummaryToValue(findPreference("long_break_time"));
-            bindPreferenceSummaryToValue(findPreference("sessions"));
+            bindPreferenceSummaryToValue(findPreference("sessions_till_long_break"));
         }
 
         @Override

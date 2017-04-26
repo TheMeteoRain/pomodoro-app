@@ -2,24 +2,15 @@
 
     <!-- These settings headers are only used on tablets. -->
 
+
     <header
-        android:fragment="fi.productivity.sharpproductivitytimer.SettingsActivity$SessionPreferenceFragment"
+        android:fragment="fi.productivity.sharpproductivitytimer.setting.SettingsActivity$SessionPreferenceFragment"
         android:icon="@drawable/ic_action_sessions"
         android:title="@string/pref_header_session" />
 
     <header
-        android:fragment="fi.productivity.sharpproductivitytimer.SettingsActivity$GeneralPreferenceFragment"
+        android:fragment="fi.productivity.sharpproductivitytimer.setting.SettingsActivity$GeneralPreferenceFragment"
         android:icon="@drawable/ic_action_general"
         android:title="@string/pref_header_general" />
-
-    <header
-        android:fragment="fi.productivity.sharpproductivitytimer.SettingsActivity$NotificationPreferenceFragment"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/pref_header_notifications" />
-
-    <header
-        android:fragment="fi.productivity.sharpproductivitytimer.SettingsActivity$DataSyncPreferenceFragment"
-        android:icon="@drawable/ic_sync_black_24dp"
-        android:title="@string/pref_header_data_sync" />
 
 </preference-headers>
