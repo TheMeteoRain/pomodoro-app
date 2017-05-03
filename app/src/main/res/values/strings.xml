@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sharp Productivity Timer</string>
+    <string name="app_name">Sharptime</string>
     <string name="debugLevel">3</string>
     <string name="action_settings">Settings</string>
     <string-array name="pomodoro_time">
@@ -27,33 +27,44 @@
     <string name="notification_pause">Pause / Resume</string>
     <string name="title_activity_settings">Settings</string>
 
+    <!-- Notification -->
+    <string name="notification_title_pomodoro">Session complete</string>
+    <string name="notification_title_break">Breaktime complete</string>
+
     <!-- Stats Activity -->
     <string name="stat_session_total">Total: %1$d</string>
     <string name="stat_session_completed">Completed: %1$d</string>
     <string name="stat_session_stopped">Stopped: %1$d</string>
 
-    <string name="stat_time_pomodoro">Total work time: %1$d:%2$d</string>
-    <string name="stat_time_break">Total break time: %1$d</string>
+    <string name="stat_time_pomodoro_title">Total work time</string>
+    <string name="stat_time_break_title">Total break time</string>
+    <string-array name="stat_time_pomodoro">
+        <item>%1$s: %2$d:0%3$d:0%4$d h</item>
+        <item>%1$s: %2$d:0%3$d:%4$d h</item>
+        <item>%1$s: %2$d:%3$d:0%4$d h</item>
+        <item>%1$s: %2$d:%3$d:%4$d h</item>
+    </string-array>
 
     <!-- Strings related to Settings -->
 
     <!-- Session settings -->
     <string name="pref_header_session">Session</string>
 
-    <string name="pref_title_pomodoro_time">Work session duration</string>
+    <string name="pref_title_pomodoro_time">Work session duration (minutes)</string>
     <string name="pref_default_pomodoro_time">25</string>
 
-    <string name="pref_title_break_time">Break duration</string>
+    <string name="pref_title_break_time">Break duration (minutes)</string>
     <string name="pref_default_break_time">5</string>
 
-    <string name="pref_title_long_break_time">Long break duration</string>
+    <string name="pref_title_long_break_time">Long break duration (minutes)</string>
     <string name="pref_default_long_break_time">10</string>
 
-    <string name="pref_title_sessions">Number of sessions before a long break</string>
+    <string name="pref_title_sessions">Number of sessions before a long brea</string>
     <string name="pref_default_sessions">4</string>
 
     <string name="pref_title_session_count">session_count</string>
     <string name="pref_default_session_count">0</string>
+
 
     <!-- General settings -->
     <string name="pref_header_general">General</string>
@@ -66,6 +77,14 @@
 
     <string name="pref_title_continuous_mode">Continuous mode</string>
     <string name="pref_description_continuous_mode">Timers will keep running until you stop them</string>
+
+    <string name="action_stats">Stats</string>
+    <string name="title_activity_stat">Stats</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="timer_title_pomodoro">Session in progress</string>
+    <string name="timer_title_break">Break in progress</string>
+    <string name="timer_title_long_break">Long break in progress</string>
+    <string name="title_activity_aaa">Settings</string>
 
     <string name="pref_title_social_recommendations">Enable social recommendations</string>
     <string name="pref_description_social_recommendations">Recommendations for people to contact
@@ -133,9 +152,6 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="action_stats">Stats</string>
-    <string name="title_activity_stat">Stats</string>
-    <string name="section_format">Hello World from section: %1$d</string>
 
 
 </resources>

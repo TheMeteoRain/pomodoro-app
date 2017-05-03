@@ -14,7 +14,8 @@
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:taskAffinity="">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,6 +29,16 @@
             android:exported="true" />
 
         <activity
+            android:name=".StatActivity"
+            android:label="@string/title_activity_stat"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fi.productivity.sharpproductivitytimer.MainActivity" />
+        </activity>
+        <activity
             android:name=".setting.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".MainActivity"
@@ -37,15 +48,8 @@
                 android:value="fi.productivity.sharpproductivitytimer.MainActivity" />
         </activity>
         <activity
-            android:name=".StatActivity"
-            android:label="@string/title_activity_stat"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="fi.productivity.sharpproductivitytimer.MainActivity" />
-        </activity>
+            android:name=".settings.aaa"
+            android:label="@string/title_activity_aaa"></activity>
     </application>
 
 </manifest>

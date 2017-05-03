@@ -23,7 +23,7 @@ import fi.productivity.sharpproductivitytimer.MainActivity;
 import fi.productivity.sharpproductivitytimer.R;
 import fi.productivity.sharpproductivitytimer.data.DataHandler;
 import fi.productivity.sharpproductivitytimer.data.Session;
-import fi.productivity.sharpproductivitytimer.debug.Debug;
+import fi.productivity.sharpproductivitytimer.utils.Debug;
 import fi.productivity.sharpproductivitytimer.utils.Utils;
 
 public class TimerService extends Service {
@@ -36,7 +36,7 @@ public class TimerService extends Service {
 
     private boolean isRunning;
   //  private boolean clockSound;
-    private boolean continuous;
+   // private boolean continuous;
     private boolean backgroundNotification;
     private boolean paused;
     private boolean pomodoroTimerOn;
@@ -72,12 +72,12 @@ public class TimerService extends Service {
         super.onCreate();
         isRunning = false;
        // clockSound = false;
-        continuous = false;
+       // continuous = false;
         backgroundNotification = false;
         paused = false;
         binder = new LocalBinder(this);
         timeleft = 0;
-        pomodoroTimerOn = false;
+        pomodoroTimerOn = true;
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         minutes = MainActivity.pomodoroTime;
         seconds = 0;
@@ -105,9 +105,6 @@ public class TimerService extends Service {
                 if (extras.get("breakTime") != null) {
                     breakTime = extras.getInt("breakTime");
                 }
-                if (extras.get("continuous") != null) {
-                    continuous = extras.getBoolean("continuous");
-                }
                 if (extras.get("longBreakTime") != null) {
                     longBreakTime = extras.getInt("longBreakTime");
                 }
@@ -132,8 +129,6 @@ public class TimerService extends Service {
                     break;
             }
         }
-
-
 
         return START_NOT_STICKY;
     }
@@ -170,7 +165,7 @@ public class TimerService extends Service {
 
     public void backgroundNotificationOn() {
         backgroundNotification = true;
-        startForeground(BACKGROUND_NOTIFICATION_ID, getNotification(notificationText()));
+        startForeground(BACKGROUND_NOTIFICATION_ID, getNotification(Utils.formatTimer(getResources(), minutes, seconds)));
     }
 
     public void backgroundNotificationOff() {
@@ -196,7 +191,10 @@ public class TimerService extends Service {
         PendingIntent piStop = PendingIntent.getService(this, BACKGROUND_NOTIFICATION_ID, stopIntent, PendingIntent.FLAG_ONE_SHOT);
 
 
-        CharSequence title = getText(R.string.app_name);
+        CharSequence title = getText(R.string.app_name) + ": " + getString(R.string.timer_title_pomodoro).toLowerCase();
+        if (!pomodoroTimerOn) {
+            title = getText(R.string.app_name) + ": " + getString(R.string.timer_title_break).toLowerCase();
+        }
         PendingIntent contentIntent = PendingIntent.getActivity(this,
                 BACKGROUND_NOTIFICATION_ID, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -210,41 +208,22 @@ public class TimerService extends Service {
                 .setContentIntent(contentIntent).getNotification();
     }
 
-    private String notificationText() {
-        String text;
-
-        if (minutes < 10) {
-            if (seconds < 10) {
-                text = String.format(getResources().getStringArray(R.array.pomodoro_time)[5], minutes, seconds);
-            } else {
-                text = String.format(getResources().getStringArray(R.array.pomodoro_time)[3], minutes, seconds);
-            }
-        } else {
-            if (seconds < 10) {
-                text = String.format(getResources().getStringArray(R.array.pomodoro_time)[4], minutes, seconds);
-            } else {
-                text = String.format(getResources().getStringArray(R.array.pomodoro_time)[2], minutes, seconds);
-            }
-        }
-
-        return text;
-    }
-
     private void updateNotification() {
-        Notification notification = getNotification(notificationText());
+        Notification notification = getNotification(Utils.formatTimer(getResources(), minutes, seconds));
         notificationManager.notify(BACKGROUND_NOTIFICATION_ID, notification);
     }
 
     //// TODO: 10-Apr-17
-    public void notifyUser() {
+    public void notifyUser(String text) {
         Debug.print("TimerService", "NOTIFY USER", 2, false, getApplicationContext());
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setAutoCancel(true)
-                        .setPriority(Notification.PRIORITY_HIGH)
-                        .setContentTitle("My notification")
-                        .setContentText("Hello World!");
+                        .setPriority(Notification.PRIORITY_MAX)
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setContentTitle(getString(R.string.app_name))
+                        .setContentText(text);
 
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(this, MainActivity.class);
@@ -285,7 +264,6 @@ public class TimerService extends Service {
         Intent i = new Intent("fi.productivity.sharpproductivitytimer.MainActivity");
         i.putExtra("seconds", seconds);
         i.putExtra("minutes", minutes);
-        i.putExtra("continuous", continuous);
         i.putExtra("firstDialog", firstDialog);
         sendBroadcast(i);
     }
@@ -326,7 +304,7 @@ public class TimerService extends Service {
 
     public void startPomodoro() {
         pomodoroTimerOn = true;
-        startTime = MainActivity.pomodoroTime * 60000 / 4;
+        startTime = MainActivity.pomodoroTime * 60000;
         timer = new PomodoroTimer(startTime, 1000);
         timer.start();
     }
@@ -334,12 +312,12 @@ public class TimerService extends Service {
     public void startBreak() {
         pomodoroTimerOn = false;
         if (MainActivity.sessionCount % MainActivity.sessionsTillLongBreak == 0) {
-            startTime = longBreakTime * 60000 / 2;
-            timer = new BreakTimer(longBreakTime * 60000 / 2, 1000);
+            startTime = longBreakTime * 60000;
+            timer = new BreakTimer(longBreakTime * 60000, 1000);
             timer.start();
         } else {
-            startTime = breakTime * 60000 / 2;
-            timer = new BreakTimer(breakTime * 60000 / 2, 1000);
+            startTime = breakTime * 60000;
+            timer = new BreakTimer(breakTime * 60000, 1000);
             timer.start();
         }
     }
@@ -404,12 +382,12 @@ public class TimerService extends Service {
             sp.play(notificationSoundId, 1, 1, 1, 0, 1);
 
             saveSession(false);
-            backgroundNotificationOff();
-            notifyUser();
+            notifyUser(getString(R.string.notification_title_pomodoro));
 
-            if (continuous) {
+            if (MainActivity.continuous) {
                 startBreak();
             } else {
+                backgroundNotificationOff();
                 requestActionFromUser(true);
             }
         }
@@ -457,12 +435,12 @@ public class TimerService extends Service {
             timeleft = 0;
             sp.play(notificationSoundId, 1, 1, 1, 0, 1);
 
-            backgroundNotificationOff();
-            notifyUser();
+            notifyUser(getString(R.string.notification_title_break));
 
-            if (continuous) {
+            if (MainActivity.continuous) {
                 startPomodoro();
             } else {
+                backgroundNotificationOff();
                 requestActionFromUser(false);
             }
         }

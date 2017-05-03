@@ -21,13 +21,14 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import fi.productivity.sharpproductivitytimer.debug.Debug;
+import fi.productivity.sharpproductivitytimer.utils.Debug;
 import fi.productivity.sharpproductivitytimer.dialog.SessionDialogListener;
 import fi.productivity.sharpproductivitytimer.dialog.SessionFirstDialog;
 import fi.productivity.sharpproductivitytimer.dialog.SessionSecondDialog;
 import fi.productivity.sharpproductivitytimer.service.LocalBinder;
 import fi.productivity.sharpproductivitytimer.service.TimerService;
 import fi.productivity.sharpproductivitytimer.setting.SettingsActivity;
+import fi.productivity.sharpproductivitytimer.utils.Utils;
 
 public class MainActivity extends AppCompatActivity implements SessionDialogListener {
 
@@ -36,10 +37,11 @@ public class MainActivity extends AppCompatActivity implements SessionDialogList
     public static int sessionsTillLongBreak;
     public static boolean pomodoroSoundOn;
     public static boolean breakSoundOn;
+    public static boolean continuous;
 
     private boolean backgroundNotification;
   //  private boolean pomodoroSoundOn;
-    private boolean continuous;
+    //private boolean continuous;
    // private int pomodoroTime;
     private int breakTime;
     private int seconds;
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements SessionDialogList
 
     private ProgressBar timerProgress;
     private TextView timerText;
+    private TextView timerTitle;
     private Button timerButtonPlay;
     private Button timerButtonPause;
     private DialogFragment dialog;
@@ -75,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements SessionDialogList
         paused = false;
         backgroundNotification = false;
 
+        timerTitle = (TextView) findViewById(R.id.timerTitle);
         timerProgress = (ProgressBar) findViewById(R.id.timerProgress);
         timerText = (TextView) findViewById(R.id.timerText);
         timerButtonPlay = (Button) findViewById(R.id.timerButtonPlay);
@@ -235,6 +239,7 @@ public class MainActivity extends AppCompatActivity implements SessionDialogList
         pomodoroSoundOn = settings.getBoolean("pomodoro_clock_sound", false);
         breakSoundOn = settings.getBoolean("break_clock_sound", false);
         continuous = settings.getBoolean("continuous_mode", false);
+        sessionCount = settings.getInt("sessionCount", 0);
     }
 
     private void turnProgressOn() {
@@ -243,6 +248,22 @@ public class MainActivity extends AppCompatActivity implements SessionDialogList
 
     private void turnProgressOff() {
         timerProgress.setVisibility(View.GONE);
+    }
+
+    private void turnTimerTitleOn() {
+        timerTitle.setVisibility(View.VISIBLE);
+
+        if (timerService.isPomodoroTimerOn()) {
+            timerTitle.setText(R.string.timer_title_pomodoro);
+        } else if (sessionCount % sessionsTillLongBreak == 0) {
+            timerTitle.setText(R.string.timer_title_long_break);
+        } else {
+            timerTitle.setText(R.string.timer_title_break);
+        }
+    }
+
+    private void turnTimerTitleOff() {
+        timerTitle.setVisibility(View.INVISIBLE);
     }
 
     // play and stop
@@ -254,19 +275,20 @@ public class MainActivity extends AppCompatActivity implements SessionDialogList
           //  timerIntent.putExtra("pomodoroTime", pomodoroTime);
             timerIntent.putExtra("breakTime", breakTime);
            // timerIntent.putExtra("clockSound", pomodoroSoundOn);
-            timerIntent.putExtra("continuous", continuous);
             timerIntent.putExtra("longBreakTime", longBreakTime);
          //   timerIntent.putExtra("sessionsTillLongBreak", sessionsTillLongBreak);
             startService(timerIntent);
             timerButtonPlay.setText(R.string.timer_button_stop);
-            turnProgressOff();
+            turnProgressOn();
+            turnTimerTitleOn();
         } else {
             reset();
             boundService();
             stopService(timerIntent);
             timerButtonPause.setText(R.string.timer_button_pause);
             timerButtonPlay.setText(R.string.timer_button_start);
-            turnProgressOn();
+            turnProgressOff();
+            turnTimerTitleOff();
         }
     }
 
@@ -275,10 +297,12 @@ public class MainActivity extends AppCompatActivity implements SessionDialogList
         if (timerService.isRunning()) {
             if (!timerService.isPaused()) {
                 paused = true;
+                turnProgressOff();
                 timerService.pauseTimer();
                 timerButtonPause.setText(R.string.timer_button_resume);
             } else {
                 paused = false;
+                turnProgressOn();
                 timerService.resumeTimer();
                 timerButtonPause.setText(R.string.timer_button_pause);
             }
@@ -286,19 +310,7 @@ public class MainActivity extends AppCompatActivity implements SessionDialogList
     }
 
     public void printTimer() {
-        if (minutes < 10) {
-            if (seconds < 10) {
-                timerText.setText(String.format(getResources().getStringArray(R.array.pomodoro_time)[5], minutes, seconds));
-            } else {
-                timerText.setText(String.format(getResources().getStringArray(R.array.pomodoro_time)[3], minutes, seconds));
-            }
-        } else {
-            if (seconds < 10) {
-                timerText.setText(String.format(getResources().getStringArray(R.array.pomodoro_time)[4], minutes, seconds));
-            } else {
-                timerText.setText(String.format(getResources().getStringArray(R.array.pomodoro_time)[2], minutes, seconds));
-            }
-        }
+        timerText.setText(Utils.formatTimer(getResources(), minutes, seconds));
     }
 
     private void reset() {
@@ -313,11 +325,15 @@ public class MainActivity extends AppCompatActivity implements SessionDialogList
     @Override
     public void onDialogStartBreak() {
         timerService.startBreak();
+        turnTimerTitleOn();
+        turnProgressOn();
     }
 
     @Override
     public void onDialogSkipBreak() {
         timerService.startPomodoro();
+        turnTimerTitleOn();
+        turnProgressOn();
     }
 
     @Override
@@ -326,14 +342,21 @@ public class MainActivity extends AppCompatActivity implements SessionDialogList
         boundService();
         stopService(timerIntent);
         timerButtonPlay.setText(R.string.timer_button_start);
+        turnProgressOff();
+        turnTimerTitleOff();
     }
 
     public void updateSessionCounter(boolean reset) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+
+
         if (!reset) {
-            sessionCount = settings.getInt(getString(R.string.pref_title_session_count), Integer.parseInt(getString(R.string.pref_default_session_count)));
+            sessionCount = settings.getInt(getString(R.string.pref_title_session_count), 0);
         } else {
-            sessionCount = Integer.parseInt(getString(R.string.pref_default_session_count));
+            SharedPreferences.Editor editor = settings.edit();
+            sessionCount = 0;
+            editor.putInt(getString(R.string.pref_title_session_count), sessionCount);
+            editor.apply();
         }
 
         Debug.print("MainActivity", "SESSION COUNTER " + sessionCount, 2, false, this);
@@ -350,6 +373,8 @@ public class MainActivity extends AppCompatActivity implements SessionDialogList
 
     public void openDialog() {
         reset();
+        turnTimerTitleOff();
+        turnProgressOff();
         if (firstDialog) {
             dialog = new SessionFirstDialog();
             dialog.setCancelable(false);
@@ -382,8 +407,7 @@ public class MainActivity extends AppCompatActivity implements SessionDialogList
                     printTimer();
                 }
 
-                if (extras.get("continuous") != null && extras.get("firstDialog") != null) {
-                    continuous = extras.getBoolean("continuous");
+                if (extras.get("firstDialog") != null) {
                     firstDialog = extras.getBoolean("firstDialog");
                     updateSessionCounter(false);
 
@@ -417,6 +441,8 @@ public class MainActivity extends AppCompatActivity implements SessionDialogList
             printTimer();
 
             if (timerService.isRunning()) {
+                turnProgressOn();
+                turnTimerTitleOn();
                 Debug.print("MainActivity", "DIALOGS", 2, false, getApplicationContext());
                 Debug.print("MainActivity", "MINUTES " + minutes, 2, false, getApplicationContext());
                 Debug.print("MainActivity", "SECONDS " + seconds, 2, false, getApplicationContext());
@@ -424,6 +450,9 @@ public class MainActivity extends AppCompatActivity implements SessionDialogList
                     Debug.print("MainActivity", "OPEN DIALOG", 2, false, getApplicationContext());
                     openDialog();
                 }
+            } else {
+                turnProgressOff();
+                turnTimerTitleOff();
             }
 
             if (timerService.isPaused()) {

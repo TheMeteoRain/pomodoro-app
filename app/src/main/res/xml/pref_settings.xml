@@ -8,43 +8,47 @@
             android:inputType="number"
             android:numeric="integer"
             android:key="pomodoro_time"
-            android:maxLines="1"
+            android:maxLines="2"
             android:maxLength="2"
             android:selectAllOnFocus="true"
             android:singleLine="false"
+            android:summary="@string/pref_default_pomodoro_time"
             android:title="@string/pref_title_pomodoro_time" />
 
         <EditTextPreference
             android:defaultValue="@string/pref_default_break_time"
+            android:summary="@string/pref_default_break_time"
             android:inputType="number"
             android:numeric="integer"
             android:key="break_time"
-            android:maxLines="1"
+            android:maxLines="2"
             android:maxLength="2"
             android:selectAllOnFocus="true"
-            android:singleLine="true"
+            android:singleLine="false"
             android:title="@string/pref_title_break_time" />
 
         <EditTextPreference
             android:defaultValue="@string/pref_default_long_break_time"
+            android:summary="@string/pref_default_long_break_time"
             android:inputType="number"
             android:numeric="integer"
             android:key="long_break_time"
-            android:maxLines="1"
+            android:maxLines="2"
             android:maxLength="2"
             android:selectAllOnFocus="true"
-            android:singleLine="true"
+            android:singleLine="false"
             android:title="@string/pref_title_long_break_time" />
 
         <EditTextPreference
             android:defaultValue="@string/pref_default_sessions"
+            android:summary="@string/pref_default_sessions"
             android:inputType="number"
             android:numeric="integer"
             android:key="sessions_till_long_break"
-            android:maxLines="1"
+            android:maxLines="2"
             android:maxLength="1"
             android:selectAllOnFocus="true"
-            android:singleLine="true"
+            android:singleLine="false"
             android:title="@string/pref_title_sessions" />
     </PreferenceCategory>
 
@@ -52,28 +56,26 @@
         android:title="General">
         <SwitchPreference
             android:defaultValue="false"
+            android:singleLine="false"
             android:key="pomodoro_clock_sound"
             android:summary="@string/pref_description_pomodoro_clock_sound"
             android:title="@string/pref_title_pomodoro_clock_sound" />
 
         <SwitchPreference
             android:defaultValue="false"
+            android:singleLine="false"
             android:key="break_clock_sound"
             android:summary="@string/pref_description_break_clock_sound"
             android:title="@string/pref_title_break_clock_sound" />
 
         <SwitchPreference
             android:defaultValue="false"
+            android:singleLine="false"
             android:key="continuous_mode"
             android:summary="@string/pref_description_continuous_mode"
             android:title="@string/pref_title_continuous_mode" />
-
-        <RingtonePreference
-            android:key="notification_sound"
-            android:title="Ringtone"
-            android:summary="Select ringtone"
-            android:ringtoneType="notification"
-            android:showDefault="true" />
     </PreferenceCategory>
+
+
 
 </PreferenceScreen>
