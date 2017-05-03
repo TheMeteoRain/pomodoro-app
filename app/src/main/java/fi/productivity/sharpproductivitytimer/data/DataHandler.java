@@ -10,9 +10,11 @@ import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
-import fi.productivity.sharpproductivitytimer.debug.Debug;
+import fi.productivity.sharpproductivitytimer.utils.Debug;
 import fi.productivity.sharpproductivitytimer.utils.Utils;
 
 /**
@@ -26,6 +28,7 @@ public class DataHandler {
 
     private Data today;
     private Data week;
+    private List<Data> weekly;
     private Data total;
 
     private long todayStart;
@@ -41,6 +44,11 @@ public class DataHandler {
     }
 
     private void initialize() {
+        today = new Data();
+        week = new Data();
+        total = new Data();
+        weekly = new ArrayList<>();
+
         Calendar cal = Utils.getCalendarToday();
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
@@ -58,7 +66,17 @@ public class DataHandler {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         firstDayOfTheWeekStart = cal.getTimeInMillis();
-        cal.add(Calendar.DAY_OF_WEEK, 6);
+
+        for (int i = 0; i < 7; i++) {
+            Data data = new Data();
+            data.setTime(cal.getTimeInMillis());
+            weekly.add(data);
+
+            if (i != 6) {
+                cal.add(Calendar.DAY_OF_WEEK, 1);
+            }
+        }
+
         cal.set(Calendar.HOUR_OF_DAY, 23);
         cal.set(Calendar.MINUTE, 59);
         cal.set(Calendar.SECOND, 59);
@@ -68,10 +86,6 @@ public class DataHandler {
         System.out.println(todayEnd);
         System.out.println(firstDayOfTheWeekStart);
         System.out.println(lastDayOfTheWeekEnd);
-
-        today = new Data();
-        week = new Data();
-        total = new Data();
     }
 
     private void calculateStatistics() {
@@ -81,19 +95,68 @@ public class DataHandler {
                 long time = object.getLong("date");
 
                 if (todayStart <= time && time <= todayEnd) {
-                    System.out.println("DAY " + todayStart + " <= " + time + " && " + time + " <= " + todayEnd);
+                   // System.out.println("DAY " + todayStart + " <= " + time + " && " + time + " <= " + todayEnd);
                     calculateStats(today, object);
                 }
 
                 if (firstDayOfTheWeekStart <= time && time <= lastDayOfTheWeekEnd) {
-                    System.out.println("WEEK " + todayStart + " <= " + time + " && " + time + " <= " + lastDayOfTheWeekEnd);
+                  //  System.out.println("WEEK " + firstDayOfTheWeekStart + " <= " + time + " && " + time + " <= " + lastDayOfTheWeekEnd);
                     calculateStats(week, object);
+                    weeklyStats(weekly, object);
                 }
 
                 calculateStats(total, object);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void weeklyStats(List<Data> weekly, JSONObject object) {
+        try {
+            long time = object.getLong("date");
+            int minutes = object.getInt("minutes");
+            int seconds = object.getInt("seconds");
+            int pomodoroTime = object.getInt("pomodoroTime");
+            int breakTime = object.getInt("breakTime");
+            boolean stopped = object.getBoolean("stopped");
+
+            Calendar cal = Utils.getCalendarThisWeek();
+            cal.setTimeInMillis(firstDayOfTheWeekStart);
+            boolean done = false;
+            for (int i = 0; i < 7 && !done; i++) {
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                long dayStart = cal.getTimeInMillis();
+                cal.set(Calendar.HOUR_OF_DAY, 23);
+                cal.set(Calendar.MINUTE, 59);
+                cal.set(Calendar.SECOND, 59);
+                cal.set(Calendar.MILLISECOND, 999);
+                long dayEnd = cal.getTimeInMillis();
+
+                if (dayStart <= time && time <= dayEnd) {
+                    Data data = weekly.get(i);
+
+                    data.setTime(dayStart);
+                    data.setSessionsTotal(data.getSessionsTotal() + 1);
+                    data.setBreakTimeMinutes(data.getBreakTimeMinutes() + breakTime);
+
+                    if (minutes == 0 && seconds == 0) {
+                        data.setPomodoroTimeMinutes(data.getPomodoroTimeMinutes() + pomodoroTime);
+                    } else {
+                        data.setPomodoroTimeSeconds(data.getPomodoroTimeSeconds() + seconds);
+                    }
+
+                    weekly.set(i, data);
+                    done = true;
+                }
+
+                cal.add(Calendar.DATE, 1);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -106,15 +169,19 @@ public class DataHandler {
             boolean stopped = object.getBoolean("stopped");
 
             data.setSessionsTotal(data.getSessionsTotal() + 1);
-            data.setBreakTime(data.getBreakTime() + breakTime);
+            data.setBreakTimeMinutes(data.getBreakTimeMinutes() + breakTime);
+
             if (minutes == 0 && seconds == 0) {
                 data.setPomodoroTimeMinutes(data.getPomodoroTimeMinutes() + pomodoroTime);
             } else {
-                data.setPomodoroTimeMinutes(data.getPomodoroTimeMinutes() + (pomodoroTime - minutes));
+                //data.setPomodoroTimeMinutes(data.getPomodoroTimeMinutes() + (pomodoroTime - minutes));
                 data.setPomodoroTimeSeconds(data.getPomodoroTimeSeconds() + seconds);
             }
+
             if (!stopped) {
                 data.setSessionsCompleted(data.getSessionsCompleted() + 1);
+            } else {
+                data.setSessionsStopped(data.getSessionsStopped() + 1);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -166,5 +233,17 @@ public class DataHandler {
 
     public Data getTotal() {
         return total;
+    }
+
+    public List<Data> getWeekly() {
+        return weekly;
+    }
+
+    public long getFirstDayOfTheWeekStart() {
+        return firstDayOfTheWeekStart;
+    }
+
+    public long getLastDayOfTheWeekEnd() {
+        return lastDayOfTheWeekEnd;
     }
 }

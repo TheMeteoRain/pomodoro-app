@@ -1,4 +1,4 @@
-package fi.productivity.sharpproductivitytimer.debug;
+package fi.productivity.sharpproductivitytimer.utils;
 
 import android.content.Context;
 import android.util.Log;
