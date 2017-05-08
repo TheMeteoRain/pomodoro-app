@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:background="@color/colorPrimary"
-        android:text="@string/dialog_session_complete"
+        android:text="@string/dialog_session_break_complete"
         android:textColor="#FFF"
         android:gravity="center_vertical"
         android:paddingStart="15dp"

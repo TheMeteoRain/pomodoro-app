@@ -11,20 +11,20 @@ import fi.productivity.sharpproductivitytimer.R;
 
 
 /**
- * Pomodoro dialogue.
+ * Session counter dialogue.
  *
- * Asked when user completes successfully pomodoro timer.
+ * Asked when user presses session counter in MainActivity.
  *
  * @author      Akash Singh
  * @version     %I%, %G%
  * @since       1.7
  */
-public class SessionFirstDialog extends DialogFragment implements SessionDialogListener {
+public class SessionCountDialog extends DialogFragment implements SessionCountDialogListener {
 
     /**
      * Callback.
      */
-    SessionDialogListener mListener;
+    SessionCountDialogListener mListener;
 
     /**
      * {@inheritDoc}
@@ -37,11 +37,11 @@ public class SessionFirstDialog extends DialogFragment implements SessionDialogL
         try {
             // Instantiate the NoticeDialogListener so we can send events to the host
             if (activity instanceof SessionDialogListener)
-                mListener = (SessionDialogListener) activity;
+                mListener = (SessionCountDialogListener) activity;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(activity.toString()
-                    + " must implement SessionDialogListener");
+                    + " must implement SessionCountDialogListener");
         }
     }
 
@@ -56,15 +56,12 @@ public class SessionFirstDialog extends DialogFragment implements SessionDialogL
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        builder.setView(inflater.inflate(R.layout.dialog_session_pomodoro, null))
-                .setNeutralButton(R.string.dialog_button_close, (dialog, id) -> {
-                    mListener.onDialogClose();
+        builder.setView(inflater.inflate(R.layout.dialog_session_count, null))
+                .setPositiveButton(R.string.dialog_session_count_button_ok, (dialog, id) -> {
+                    mListener.onDialogSessionsReset();
                 })
-                .setPositiveButton(R.string.dialog_button_start, (dialog, id) -> {
-                    mListener.onDialogStartBreak();
-                })
-                .setNegativeButton(R.string.dialog_button_skip, (dialog, id) -> {
-                    mListener.onDialogSkipBreak();
+                .setNeutralButton(R.string.dialog_session_count_button_close, (dialog, id) -> {
+
                 });
         return builder.create();
     }
@@ -73,23 +70,7 @@ public class SessionFirstDialog extends DialogFragment implements SessionDialogL
      * {@inheritDoc}
      */
     @Override
-    public void onDialogStartBreak() {
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onDialogSkipBreak() {
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onDialogClose() {
+    public void onDialogSessionsReset() {
 
     }
 }

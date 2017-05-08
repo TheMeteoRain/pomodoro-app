@@ -20,8 +20,6 @@ import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
-import org.json.JSONArray;
-
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +28,15 @@ import fi.productivity.sharpproductivitytimer.data.DataHandler;
 import fi.productivity.sharpproductivitytimer.utils.Debug;
 import fi.productivity.sharpproductivitytimer.utils.Utils;
 
+/**
+ * StatActivity is responsible for showing all the calculated data user has generated.
+ *
+ * Data is categorized to these three tabs: today, this week and total.
+ *
+ * @author      Akash Singh
+ * @version     %I%, %G%
+ * @since       1.7
+ */
 public class StatActivity extends AppCompatActivity {
 
     /**
@@ -41,21 +48,26 @@ public class StatActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+
+    /**
+     * Contains all the statistics, ready parsed.
+     */
     private static DataHandler dataHandler;
-    private static JSONArray data;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stat);
 
         dataHandler = new DataHandler(getApplicationContext());
-        data = dataHandler.getData();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -82,9 +94,6 @@ public class StatActivity extends AppCompatActivity {
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        public PlaceholderFragment() {
-        }
-
         /**
          * Returns a new instance of this fragment for the given section
          * number.
@@ -97,6 +106,9 @@ public class StatActivity extends AppCompatActivity {
             return fragment;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -146,7 +158,7 @@ public class StatActivity extends AppCompatActivity {
                 Data d = weekly.get(i);
                 double minutes = d.getPomodoroTimeMinutes() + d.getPomodoroTimeHours() * 60 + d.getPomodoroTimeSeconds() / 100d;
                 minutes = (double) Math.round(minutes * 100) / 100;
-                dataPoints[i] = new DataPoint(new Date(d.getTime()), minutes);
+                dataPoints[i] = new DataPoint(d.getTime(), minutes);
             }
 
             for (int i = 0; i < weekly.size(); i++) {
@@ -158,6 +170,9 @@ public class StatActivity extends AppCompatActivity {
             graph.addSeries(series);
 
             series.setValueDependentColor(new ValueDependentColor<DataPoint>() {
+                /**
+                 * {@inheritDoc}
+                 */
                 @Override
                 public int get(DataPoint data) {
                     return Color.rgb((int) data.getX()*255/4, (int) Math.abs(data.getY()*255/6), 100);
@@ -198,6 +213,9 @@ public class StatActivity extends AppCompatActivity {
             super(fm);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
@@ -205,12 +223,18 @@ public class StatActivity extends AppCompatActivity {
             return PlaceholderFragment.newInstance(position + 1);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public int getCount() {
             // Show 3 total pages.
             return 3;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
