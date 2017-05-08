@@ -9,14 +9,26 @@ import android.view.LayoutInflater;
 
 import fi.productivity.sharpproductivitytimer.R;
 
-/**
- * Created by Akash on 10-Apr-17.
- */
 
+/**
+ * Break dialogue.
+ *
+ * Asked when user completes successfully break timer.
+ *
+ * @author      Akash Singh
+ * @version     %I%, %G%
+ * @since       1.7
+ */
 public class SessionSecondDialog extends DialogFragment implements SessionDialogListener {
 
+    /**
+     * Callback.
+     */
     SessionDialogListener mListener;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -29,10 +41,13 @@ public class SessionSecondDialog extends DialogFragment implements SessionDialog
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(activity.toString()
-                    + " must implement NoticeDialogListener");
+                    + " must implement SessionDialogListener");
         }
     }
-//asd
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -41,7 +56,7 @@ public class SessionSecondDialog extends DialogFragment implements SessionDialog
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        builder.setView(inflater.inflate(R.layout.dialog_session, null))
+        builder.setView(inflater.inflate(R.layout.dialog_session_break, null))
                 .setNeutralButton(R.string.dialog_button_close, (dialog, id) -> {
                     System.out.println("CLOSE " + id);
                     mListener.onDialogClose();
@@ -53,16 +68,25 @@ public class SessionSecondDialog extends DialogFragment implements SessionDialog
         return builder.create();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onDialogStartBreak() {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onDialogSkipBreak() {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onDialogClose() {
 

@@ -17,32 +17,74 @@ import java.util.List;
 import fi.productivity.sharpproductivitytimer.utils.Debug;
 import fi.productivity.sharpproductivitytimer.utils.Utils;
 
-/**
- * Created by Akash on 10-Apr-17.
- */
 
+/**
+ * Calculates and parses user data to usable Data objects.
+ *
+ * @author      Akash Singh
+ * @version     %I%, %G%
+ * @since       1.7
+ */
 public class DataHandler {
 
+    /**
+     * Filename where to save data.
+     */
     private final static String filename = "data.json";
+    /**
+     * File information as a json array.
+     */
     private static JSONArray data;
 
+    /**
+     * Today's total statistics.
+     */
     private Data today;
+    /**
+     * This week's total statistics.
+     */
     private Data week;
+    /**
+     * This week's statistics broken down to weekdays.
+     */
     private List<Data> weekly;
+    /**
+     * All statistics.
+     */
     private Data total;
 
+    /**
+     * Starting time of current day as milliseconds.
+     */
     private long todayStart;
+    /**
+     * Ending time of current day as milliseconds.
+     */
     private long todayEnd;
+    /**
+     * Starting time of current week as milliseconds.
+     */
     private long firstDayOfTheWeekStart;
+    /**
+     * Ending time of current week as milliseconds.
+     */
     private long lastDayOfTheWeekEnd;
 
 
+    /**
+     * Reads data file, initializes data and calculate statistics.
+     *
+     * @param context
+     */
     public DataHandler(Context context) {
         read(context);
         initialize();
         calculateStatistics();
     }
 
+    /**
+     * Initializes data objects.
+     */
     private void initialize() {
         today = new Data();
         week = new Data();
@@ -88,6 +130,9 @@ public class DataHandler {
         System.out.println(lastDayOfTheWeekEnd);
     }
 
+    /**
+     * Arranges data statistics to their own categories.
+     */
     private void calculateStatistics() {
         for (int i = 0; i < data.length(); i++) {
             try {
@@ -95,14 +140,12 @@ public class DataHandler {
                 long time = object.getLong("date");
 
                 if (todayStart <= time && time <= todayEnd) {
-                   // System.out.println("DAY " + todayStart + " <= " + time + " && " + time + " <= " + todayEnd);
                     calculateStats(today, object);
                 }
 
                 if (firstDayOfTheWeekStart <= time && time <= lastDayOfTheWeekEnd) {
-                  //  System.out.println("WEEK " + firstDayOfTheWeekStart + " <= " + time + " && " + time + " <= " + lastDayOfTheWeekEnd);
                     calculateStats(week, object);
-                    weeklyStats(weekly, object);
+                    weeklyStats(object);
                 }
 
                 calculateStats(total, object);
@@ -112,7 +155,12 @@ public class DataHandler {
         }
     }
 
-    private void weeklyStats(List<Data> weekly, JSONObject object) {
+    /**
+     * Calculate statistics to weekdays.
+     *
+     * @param object object to whom extract data.
+     */
+    private void weeklyStats(JSONObject object) {
         try {
             long time = object.getLong("date");
             int minutes = object.getInt("minutes");
@@ -160,6 +208,12 @@ public class DataHandler {
         }
     }
 
+    /**
+     * Calculate stats to given data object.
+     *
+     * @param data object to save data.
+     * @param object object to whom extract data.
+     */
     private void calculateStats(Data data, JSONObject object) {
         try {
             int minutes = object.getInt("minutes");
@@ -188,6 +242,12 @@ public class DataHandler {
         }
     }
 
+    /**
+     * Save data to file.
+     *
+     * @param context
+     * @param session
+     */
     public static void save(Context context, Session session) {
         Debug.print("DataHandler", "SAVE", 3, false, context);
         data = read(context);
@@ -200,6 +260,12 @@ public class DataHandler {
         }
     }
 
+    /**
+     * Read data from file.
+     *
+     * @param context
+     * @return file data.
+     */
     public static JSONArray read(Context context) {
         Debug.print("DataHandler", "READ", 3, false, context);
         data = new JSONArray();
@@ -219,30 +285,65 @@ public class DataHandler {
         return data;
     }
 
+    /**
+     * Get file data.
+     *
+     * @return file data.
+     */
     public JSONArray getData() {
         return data;
     }
 
+    /**
+     * Get statistics from today.
+     *
+     * @return today's statistics.
+     */
     public Data getToday() {
         return today;
     }
 
+    /**
+     * Get statistics from this week.
+     *
+     * @return this week's statistics.
+     */
     public Data getWeek() {
         return week;
     }
 
+    /**
+     * Get total statistics.
+     *
+     * @return total statistics.
+     */
     public Data getTotal() {
         return total;
     }
 
+    /**
+     * Get this week's statistics parsed to weekdays.
+     *
+     * @return this week's weekdays statistics.
+     */
     public List<Data> getWeekly() {
         return weekly;
     }
 
+    /**
+     * Get first day of the week.
+     *
+     * @return first day of the week.
+     */
     public long getFirstDayOfTheWeekStart() {
         return firstDayOfTheWeekStart;
     }
 
+    /**
+     * Get last day of the week.
+     *
+     * @return last day of the week.
+     */
     public long getLastDayOfTheWeekEnd() {
         return lastDayOfTheWeekEnd;
     }

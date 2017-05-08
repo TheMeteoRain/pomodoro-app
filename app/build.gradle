@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'MeteoRain'
+            keyPassword 'Kahvit%&Eka!?Sitten#=Koodaamaan'
+            storeFile file('X:/AMK/Vuosi2/Mobiiliohjelmointi/project/android.jks')
+            storePassword 'SeOnYks%&Liirum!?Laarum'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -19,6 +27,15 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                renameAPK(variant, defaultConfig, 'R')
+            }
+            signingConfig signingConfigs.config
+        }
+        debug {
+            applicationVariants.all { variant ->
+                renameAPK(variant, defaultConfig, 'T')
+            }
         }
     }
     compileOptions {
@@ -27,8 +44,18 @@ android {
     }
 }
 
+def renameAPK(variant, defaultConfig, buildType) {
+    variant.outputs.each { output ->
+        def formattedDate = new Date().format('yyMMdd')
+
+        def file = output.packageApplication.outputFile
+        def fileName = applicationName + "_V" + defaultConfig.versionCode + "_" + formattedDate + "_" + buildType + ".apk"
+        output.packageApplication.outputFile = new File(file.parent, fileName)
+    }
+}
+
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

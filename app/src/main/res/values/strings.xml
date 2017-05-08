@@ -18,18 +18,25 @@
     <string name="dialog_button_skip">Skip Break</string>
     <string name="dialog_button_close">Close</string>
     <string name="dialog_button_session">Begin Session</string>
-    <string name="dialog_session_complete">Session Complete</string>
+    <string name="dialog_session_pomodoro_complete">Session Complete</string>
+    <string name="dialog_session_break_complete">Break Complete</string>
+    <string name="dialog_session_count">Reset session counter?</string>
     <string-array name="dialog_session">
         <item>Session Complete</item>
         <item>Break Complete</item>
     </string-array>
     <string name="notification_stop">Stop</string>
-    <string name="notification_pause">Pause / Resume</string>
+    <string name="notification_pause">Pause</string>
+    <string name="notification_resume">Resume</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Notification -->
     <string name="notification_title_pomodoro">Session complete</string>
     <string name="notification_title_break">Breaktime complete</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_session_count_button_ok">Reset counter</string>
+    <string name="dialog_session_count_button_close">Do not reset</string>
 
     <!-- Stats Activity -->
     <string name="stat_session_total">Total: %1$d</string>
@@ -39,10 +46,10 @@
     <string name="stat_time_pomodoro_title">Total work time</string>
     <string name="stat_time_break_title">Total break time</string>
     <string-array name="stat_time_pomodoro">
-        <item>%1$s: %2$d:0%3$d:0%4$d h</item>
-        <item>%1$s: %2$d:0%3$d:%4$d h</item>
-        <item>%1$s: %2$d:%3$d:0%4$d h</item>
-        <item>%1$s: %2$d:%3$d:%4$d h</item>
+        <item>%1$s: %2$d h 0%3$d min 0%4$d s</item>
+        <item>%1$s: %2$d h 0%3$d min %4$d s</item>
+        <item>%1$s: %2$d h %3$d min 0%4$d s</item>
+        <item>%1$s: %2$d h %3$d min %4$d s</item>
     </string-array>
 
     <!-- Strings related to Settings -->
@@ -59,7 +66,7 @@
     <string name="pref_title_long_break_time">Long break duration (minutes)</string>
     <string name="pref_default_long_break_time">10</string>
 
-    <string name="pref_title_sessions">Number of sessions before a long brea</string>
+    <string name="pref_title_sessions">Number of sessions before a long break</string>
     <string name="pref_default_sessions">4</string>
 
     <string name="pref_title_session_count">session_count</string>
@@ -69,14 +76,14 @@
     <!-- General settings -->
     <string name="pref_header_general">General</string>
 
-    <string name="pref_title_pomodoro_clock_sound">Enable pomodoro timer sound</string>
-    <string name="pref_description_pomodoro_clock_sound">You will hear a clock sounds during pomodoro timer</string>
+    <string name="pref_title_pomodoro_clock_sound">Enable clock sounds during pomodoro timer</string>
+    <string name="pref_description_pomodoro_clock_sound">You will hear tick-tock during during pomodoro timer</string>
 
-    <string name="pref_title_break_clock_sound">Enable break timer sound</string>
-    <string name="pref_description_break_clock_sound">You will hear a clock sounds during break timer</string>
+    <string name="pref_title_break_clock_sound">Enable clock sounds during break timer</string>
+    <string name="pref_description_break_clock_sound">You will hear tick-tock during break timer</string>
 
     <string name="pref_title_continuous_mode">Continuous mode</string>
-    <string name="pref_description_continuous_mode">Timers will keep running until you stop them</string>
+    <string name="pref_description_continuous_mode">Timers will keep running automatically</string>
 
     <string name="action_stats">Stats</string>
     <string name="title_activity_stat">Stats</string>
@@ -84,74 +91,4 @@
     <string name="timer_title_pomodoro">Session in progress</string>
     <string name="timer_title_break">Break in progress</string>
     <string name="timer_title_long_break">Long break in progress</string>
-    <string name="title_activity_aaa">Settings</string>
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
-
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
-
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value" />
-
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
-
-
 </resources>

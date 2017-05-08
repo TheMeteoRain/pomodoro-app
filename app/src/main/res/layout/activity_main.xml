@@ -17,6 +17,7 @@
             android:layout_height="match_parent"
             style="?android:attr/progressBarStyleLarge"
             android:indeterminateDrawable="@drawable/progress"
+            android:visibility="invisible"
             android:max="100" />
 
         <TextView
