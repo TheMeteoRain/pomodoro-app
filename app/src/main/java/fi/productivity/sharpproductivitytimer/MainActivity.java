@@ -266,10 +266,6 @@ public class MainActivity extends AppCompatActivity implements SessionDialogList
         if (dialogPendingAnswer) {
             openDialog();
         }
-
-        if (sessions != null) {
-            updateSessionCounter(false);
-        }
     }
 
     /**
@@ -668,18 +664,6 @@ public class MainActivity extends AppCompatActivity implements SessionDialogList
             firstDialog = timerService.isPomodoroTimerOn();
 
             printTimer();
-
-            if (!timerService.isRunning()) {
-                turnProgressOff();
-                turnTimerTitleOff();
-                timerButtonPlay.setText(R.string.timer_button_start);
-                reset();
-            } else {
-                turnTimerTitleOn();
-               // turnProgressOn();
-              //  turnTimerTitleOn();
-               // timerButtonPlay.setText(R.string.timer_button_stop);
-            }
 
             if (timerService.isPaused()) {
                 turnProgressOff();

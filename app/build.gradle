@@ -15,8 +15,8 @@ android {
         applicationId "fi.productivity.sharpproductivitytimer"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 3
-        versionName "1.02"
+        versionCode 1
+        versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         jackOptions {
             enabled true

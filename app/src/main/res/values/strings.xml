@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Sharptime</string>
-    <string name="debugLevel">0</string>
+    <string name="debugLevel">3</string>
     <string name="action_settings">Settings</string>
     <string-array name="pomodoro_time">
         <item>%1$d:00</item>

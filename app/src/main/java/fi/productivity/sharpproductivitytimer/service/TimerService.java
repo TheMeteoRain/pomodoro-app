@@ -532,11 +532,11 @@ public class TimerService extends Service {
         updateActivity(true, false);
         if (MainActivity.sessionCount % MainActivity.sessionsTillLongBreak == 0) {
             startTime = MainActivity.longBreakTime * 60000;
-            timer = new BreakTimer(startTime, 1000);
+            timer = new BreakTimer(MainActivity.longBreakTime * 60000, 1000);
             timer.start();
         } else {
             startTime = MainActivity.breakTime * 60000;
-            timer = new BreakTimer(startTime, 1000);
+            timer = new BreakTimer(MainActivity.breakTime * 60000, 1000);
             timer.start();
         }
     }
