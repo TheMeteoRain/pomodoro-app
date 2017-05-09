@@ -124,10 +124,6 @@ public class DataHandler {
         cal.set(Calendar.SECOND, 59);
         cal.set(Calendar.MILLISECOND, 999);
         lastDayOfTheWeekEnd = cal.getTimeInMillis();
-        System.out.println(todayStart);
-        System.out.println(todayEnd);
-        System.out.println(firstDayOfTheWeekStart);
-        System.out.println(lastDayOfTheWeekEnd);
     }
 
     /**
