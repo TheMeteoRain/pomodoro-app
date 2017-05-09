@@ -8,3 +8,5 @@
 /captures
 .externalNativeBuild
 .idea
+*.apk
+app/sharptime_V1_170508_T.apk
